@@ -1,5 +1,7 @@
 (global-rbenv-mode)
 
+(golden-ratio-mode 1)
+
 (add-hook 'projectile-mode-hook 'projectile-rails-on)
 
 (add-to-list 'load-path "~/.emacs.d/vendor/foreman.el")
@@ -22,5 +24,5 @@
 
 (add-hook 'ruby-mode-hook 'ruby-refactor-mode-launch)
 
-(setq yas-snippet-dirs
-      (list (expand-file-name "snippets" user-emacs-directory))
+
+;; (setq yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))
