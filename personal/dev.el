@@ -24,5 +24,6 @@
 
 (add-hook 'ruby-mode-hook 'ruby-refactor-mode-launch)
 
+(edit-server-start)
 
 ;; (setq yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))
