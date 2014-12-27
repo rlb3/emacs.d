@@ -1,0 +1,3 @@
+[submodule "vendor/foreman.el"]
+	path = vendor/foreman.el
+	url = git://github.com/waymondo/foreman.el.git
