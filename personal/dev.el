@@ -1,29 +1,41 @@
-(global-rbenv-mode)
+(require 'cl)
+(require 'use-package)
 
-(golden-ratio-mode 1)
+(use-package rbenv
+  :ensure t
+  :init (global-rbenv-mode))
 
-(add-hook 'projectile-mode-hook 'projectile-rails-on)
+(use-package golden-ratio
+  :ensure t
+  :init (golden-ratio-mode 1))
 
-(add-to-list 'load-path "~/.emacs.d/vendor/foreman.el")
-(require 'foreman)
+(use-package projectile-rails
+  :init (add-hook 'projectile-mode-hook 'projectile-rails-on))
 
+(use-package change-inner
+  :bind (("M-i" . change-inner)
+         ("C-M-o" . change-outer)))
 
-;; Change inner
-(global-set-key (kbd "M-i") 'change-inner)
-(global-set-key (kbd "C-M-o") 'change-outer)
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-c m e" . mc/edit-lines)
+         ("C-c m n" . mc/mark-next-like-this)
+         ("C-c m p" . mc/mark-previous-like-this)
+         ("C-c m a" . mc/mark-all-like-this-dwim)))
 
-;; Multiple Cursors
-(global-set-key (kbd "C-c C-e") 'mc/edit-lines)
-(global-set-key (kbd "C-c C-f") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c C-b") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-x f") 'mc/mark-all-like-this)
+(use-package paredit
+  :ensure t)
 
-(add-hook 'prog-mode-hook 'paredit-everywhere-mode)
+(use-package jist
+  :ensure t
+  :init (setq jist-github-token "b89bfefe7531d143e93c9dc613290572271734aa"))
 
-(setq jist-github-token "b89bfefe7531d143e93c9dc613290572271734aa")
 
 (add-hook 'ruby-mode-hook 'ruby-refactor-mode-launch)
 
-(edit-server-start)
+(use-package edit-server
+  :ensure t
+  :init (edit-server-start))
 
-;; (setq yas-snippet-dirs (list (expand-file-name "snippets" user-emacs-directory))
+(use-package foreman
+  :load-path "vender/foreman.el")
