@@ -1,6 +1,20 @@
 (require 'cl)
 (require 'use-package)
 
+(defun scroll-down-keep-cursor ()
+  ;; Scroll the text one line down while keeping the cursor
+  (interactive)
+  (scroll-down 1))
+
+(defun scroll-up-keep-cursor ()
+  ;; Scroll the text one line up while keeping the cursor
+  (interactive)
+  (scroll-up 1))
+
+(bind-key "M-n"  'scroll-down-keep-cursor)
+(bind-key "M-p" 'scroll-up-keep-cursor)
+
+
 (use-package rbenv
   :ensure t
   :init (global-rbenv-mode))
@@ -60,6 +74,7 @@
       (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)))
 
 (use-package org
+  :defer t
   :init
   (progn
     (org-clock-persistence-insinuate)
@@ -109,8 +124,21 @@
                 ("i" "Interruptions" entry  (file "~/Dropbox/org-files/interruptions.org")
                  "* %? :interruption:\n%T" :clock-in t :clock-resume t))))
 
+  (defun rlb3/work-agenda ()
+    (interactive)
+    (let ((org-agenda-files '("~/Dropbox/org-files/gameplan.org" "~/Dropbox/org-files/chaione.org")))
+      (org-agenda)))
+
+  (defun rlb3/personal-agenda ()
+    (interactive)
+    (let ((org-agenda-files '( "~/Dropbox/org-files/personal.org")))
+      (org-agenda)))
+
+
   :config (use-package ox-gfm :ensure t)
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
+         ("<f10>" . rlb3/work-agenda)
+         ("<f9>" . rlb3/personal-agenda)
          ("C-c b" . org-iswitchb)
          ("C-M-t" . org-capture)))
