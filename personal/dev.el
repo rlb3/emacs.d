@@ -1,6 +1,50 @@
 (require 'cl)
 (require 'use-package)
 
+(setq user-full-name "Robert Boone"
+      user-mail-address "robert@rlb3.com")
+
+(defadvice upcase-word (before upcase-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
+
+(defadvice downcase-word (before downcase-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
+
+(defadvice capitalize-word (before capitalize-word-advice activate)
+  (unless (looking-back "\\b")
+    (backward-word)))
+
+(defun scroll-down-keep-cursor ()
+  ;; Scroll the text one line down while keeping the cursor
+  (interactive)
+  (scroll-down 1))
+
+(use-package aggressive-indent
+  :ensure t
+  :diminish aggressive-indent-mode
+  :init
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
+  (unbind-key "C-c C-q" aggressive-indent-mode-map))
+
+(defadvice kill-region (before slick-cut activate compile)
+  "When called interactively with no active region, kill a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
+(defun scroll-up-keep-cursor ()
+  ;; Scroll the text one line up while keeping the cursor
+  (interactive)
+  (scroll-up 1))
+
+(bind-key "M-n"  'scroll-down-keep-cursor)
+(bind-key "M-p" 'scroll-up-keep-cursor)
+
+
 (use-package rbenv
   :ensure t
   :init (global-rbenv-mode))
@@ -60,6 +104,7 @@
       (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)))
 
 (use-package org
+  :defer t
   :init
   (progn
     (org-clock-persistence-insinuate)
@@ -109,8 +154,35 @@
                 ("i" "Interruptions" entry  (file "~/Dropbox/org-files/interruptions.org")
                  "* %? :interruption:\n%T" :clock-in t :clock-resume t))))
 
+  (defun rlb3/work-agenda ()
+    (interactive)
+    (let ((org-agenda-files '("~/Dropbox/org-files/gameplan.org" "~/Dropbox/org-files/chaione.org")))
+      (org-agenda-list)))
+
+  (defun rlb3/personal-agenda ()
+    (interactive)
+    (let ((org-agenda-files '( "~/Dropbox/org-files/personal.org")))
+      (org-agenda-list)))
+
+
   :config (use-package ox-gfm :ensure t)
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)
          ("C-M-t" . org-capture)))
+
+(define-prefix-command 'rlb3/agenda-map)
+(bind-key "C-c a" 'rlb3/agenda-map)
+(bind-keys :map rlb3/agenda-map
+           ("a" . org-agenda)
+           ("p" . rlb3/personal-agenda)
+           ("w" . rlb3/work-agenda))
+
+
+(use-package markdown-mode
+  :ensure t)
+
+(use-package guide-key
+  :ensure t
+  :init (progn
+          (setq guide-key/guide-key-sequence '("C-x r" "C-c p" "C-x 4" "C-x n" "C-c a"))
+          (guide-key-mode 1)))
