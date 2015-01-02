@@ -63,8 +63,8 @@
 (use-package multiple-cursors
   :ensure t
   :bind (("C-c m e" . mc/edit-lines)
-         ("C-c m n" . mc/mark-next-like-this)
-         ("C-c m p" . mc/mark-previous-like-this)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
          ("C-c m a" . mc/mark-all-like-this-dwim)))
 
 (use-package paredit
@@ -133,6 +133,8 @@
                 ("CLOSED" :foreground "forest green" :weight bold)
                 ("PHONE" :foreground "forest green" :weight bold))))
 
+
+  (setq org-use-sub-superscripts "{}")
   (setq org-agenda-start-on-weekday 0)
   (setq org-clock-in-resume t)
   (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
@@ -184,5 +186,5 @@
 (use-package guide-key
   :ensure t
   :init (progn
-          (setq guide-key/guide-key-sequence '("C-x r" "C-c p" "C-x 4" "C-x n" "C-c a"))
+          (setq guide-key/guide-key-sequence '("C-x r" "C-c p" "C-x 4" "C-x n" "C-c a" "C-c m"))
           (guide-key-mode 1)))
